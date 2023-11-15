@@ -5,11 +5,16 @@ export const getEmployees = (req, res) => {
     res.send('Obteniendo empleados') // send a response to the client
 }
 
-export const createEmployees = (req, res) => {
+export const createEmployees = async (req, res) => {
     const {name, salary} = req.body
     const consult = 'INSERT INTO employee (name, salary) VALUES (?,?)'
-    pool.query(consult, [name, salary])
+    const [rows] = await pool.query(consult, [name, salary])
     console.log("Adding a employee")
+    res.send({
+        id: rows.insertId,
+        name,
+        salary
+    })
 }
 
 export const updateEmployees = (req, res) => {
